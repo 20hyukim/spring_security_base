@@ -15,9 +15,6 @@ public class Message {
     private String content;
     private long timestamp;
 
-    public Message() {
-    }
-
     public Message(String content, long timestamp) {
         this.content = content;
         this.timestamp = timestamp;
