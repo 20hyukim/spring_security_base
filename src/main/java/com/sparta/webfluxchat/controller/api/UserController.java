@@ -1,4 +1,4 @@
-package com.sparta.webfluxchat.controller;
+package com.sparta.webfluxchat.controller.api;
 
 import com.sparta.webfluxchat.dto.SignupRequestDto;
 import com.sparta.webfluxchat.service.UserService;
