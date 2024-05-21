@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Chat Application</title>
@@ -21,6 +21,7 @@
     <input type="text" id="message" placeholder="Enter your message">
     <button onclick="sendMessage()">Send</button>
 </div>
+<h5 th:text="${roomNumber}">Room Number</h5>
 
 <script>
     const eventSource = new EventSource('/chat');

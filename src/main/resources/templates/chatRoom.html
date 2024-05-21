@@ -19,7 +19,7 @@
                 <div class="card-body">
                     <h5 class="card-title" th:text="${chatRoom.name}">Chat Room Name</h5>
                     <p class="card-text">ID: <span th:text="${chatRoom.id}">1</span></p>
-                    <a th:href="@{'/chat/' + ${chatRoom.id}}" class="btn btn-primary">Enter Chat Room</a>
+                    <a th:href="@{'/chatroom/' + ${chatRoom.id}}" class="btn btn-primary">Enter Chat Room</a>
                 </div>
             </div>
         </div>
