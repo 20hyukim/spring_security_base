@@ -7,6 +7,7 @@ import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,5 +24,9 @@ public class ChatRoomService {
         chatRoomRepository.save(chatRoom);
 
         return ResponseEntity.ok("성공적으로 채팅방이 생성되었습니다.");
+    }
+
+    public List<ChatRoom> chatLists() {
+        return chatRoomRepository.findAll();
     }
 }
