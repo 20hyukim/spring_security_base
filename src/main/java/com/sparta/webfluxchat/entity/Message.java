@@ -14,10 +14,12 @@ public class Message {
     private String id;
     private String content;
     private long timestamp;
+    private long userId;
 
-    public Message(String content, long timestamp) {
+    public Message(String content, long timestamp, Long id) {
         this.content = content;
         this.timestamp = timestamp;
+        this.userId = id;
     }
 
 }

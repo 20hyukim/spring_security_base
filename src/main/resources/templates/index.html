@@ -21,7 +21,7 @@
     <input type="text" id="message" placeholder="Enter your message">
     <button onclick="sendMessage()">Send</button>
 </div>
-<h5 th:text="${roomNumber}">Room Number</h5>
+<h5 id="roomNumber" th:text="${roomNumber}">Room Number</h5>
 
 <script>
     const eventSource = new EventSource('/chat');
@@ -36,7 +36,8 @@
 
     function sendMessage() {
         const message = document.getElementById('message').value;
-        fetch(`/send?message=${encodeURIComponent(message)}`);
+        const roomnumber = document.getElementById('roomNumber').textContent;
+        fetch(`/send?message=${encodeURIComponent(message)}&roomnumber=${encodeURIComponent(roomnumber)}`);
         document.getElementById('message').value = '';
     }
 </script>
