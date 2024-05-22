@@ -13,6 +13,23 @@
         #input {
             margin-top: 10px;
         }
+        .message {
+            margin: 5px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .message.left {
+            text-align: left;
+            background-color: #f1f1f1;
+        }
+        .message.right {
+            text-align: right;
+            background-color: #d1ffd1;
+        }
+        .message-userId {
+            font-size: 0.8em;
+            color: gray;
+        }
     </style>
 </head>
 <body>
@@ -22,17 +39,42 @@
     <button onclick="sendMessage()">Send</button>
 </div>
 <h5 id="roomNumber" th:text="${roomNumber}">Room Number</h5>
+<h5 id="owner" th:text="${owner}">Owner</h5>
 
 <script>
     const roomNumber = document.getElementById('roomNumber').textContent;
-    console.log("Room Number:" , roomNumber);
+    const owner = document.getElementById('owner').textContent;
     const eventSource = new EventSource(`/chat?roomId=${encodeURIComponent(roomNumber)}`);
     const messagesDiv = document.getElementById('messages');
 
+    eventSource.onopen = function() {
+        console.log("EventSource connection opened.");
+    };
+
+    eventSource.onerror = function(error) {
+        console.error("EventSource error:", error);
+    };
+
     eventSource.onmessage = function(event) {
+        console.log("Received event:", event);
         const message = JSON.parse(event.data);
         const messageElement = document.createElement('div');
+        const userIdElement = document.createElement('div');
+
+        userIdElement.textContent = `User ID: ${message.userId}`;
+        userIdElement.className = 'message-userId';
+
         messageElement.textContent = message.content;
+        messageElement.className = 'message';
+
+        if (message.userId.toString() === owner) { // userId를 문자열로 변환하여 비교
+            messageElement.classList.add('right');
+        } else {
+            messageElement.classList.add('left');
+        }
+
+
+        messagesDiv.appendChild(userIdElement);
         messagesDiv.appendChild(messageElement);
     };
 

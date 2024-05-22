@@ -1,8 +1,10 @@
 package com.sparta.webfluxchat.controller.api;
 
 import com.sparta.webfluxchat.entity.ChatRoom;
+import com.sparta.webfluxchat.security.UserDetailsImpl;
 import com.sparta.webfluxchat.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,8 +27,9 @@ public class RoomController {
     }
 
     @GetMapping("/chatroom/{roomnumber}")
-    public String chatPage(Model model, @PathVariable Long roomnumber) {
+    public String chatPage(Model model, @PathVariable Long roomnumber, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         model.addAttribute("roomNumber", roomnumber);
+        model.addAttribute("owner", userDetails.getUser().getId());
         return "index";
     }
 

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +35,8 @@ public class ChatController {
 
     @GetMapping(value = "/chat", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Message> streamMessages(@RequestParam("roomId") Long roomId) {
-        logger.info("Streaming messages for roomId: {}", roomId);
+        //model.addAttribute("owner", userDetails.getUser().getId());
+        //logger.info("owner : {}", userDetails.getUser().getId());
         return chatService.findMessagesByRoomId(roomId)
                 .mergeWith(sink.asFlux().delayElements(Duration.ofMillis(200)));
     }
