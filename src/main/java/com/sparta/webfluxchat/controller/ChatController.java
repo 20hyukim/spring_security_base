@@ -1,10 +1,11 @@
 package com.sparta.webfluxchat.controller;
 
 import com.sparta.webfluxchat.entity.Message;
-import com.sparta.webfluxchat.repository.MessageRepository;
 import com.sparta.webfluxchat.security.UserDetailsImpl;
 import com.sparta.webfluxchat.service.ChatService;
-import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,26 +17,28 @@ import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
 import java.time.Duration;
-import java.time.Instant;
 
 @RestController
 public class ChatController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
+
     private final Sinks.Many<Message> sink;
-    private final MessageRepository messageRepository;
     private final ChatService chatService;
 
-    public ChatController(MessageRepository messageRepository, ChatService chatService) {
+    @Autowired
+    public ChatController(ChatService chatService) {
         this.chatService = chatService;
         this.sink = Sinks.many().multicast().onBackpressureBuffer();
-        this.messageRepository = messageRepository;
     }
 
     @GetMapping(value = "/chat", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<Message> streamMessages() {
-        return messageRepository.findByOrderByTimestampAsc()
-                .mergeWith(sink.asFlux())
-                .delayElements(Duration.ofMillis(200));
+    public Flux<Message> streamMessages(@RequestParam("roomId") Long roomId) {
+        logger.info("Streaming messages for roomId: {}", roomId);
+        return chatService.findMessagesByRoomId(roomId)
+                .doOnSubscribe(subscription -> logger.info("Subscribed to message stream for roomId: {}", roomId))
+                .doOnComplete(() -> logger.info("Completed message stream for roomId: {}", roomId))
+                .mergeWith(sink.asFlux().delayElements(Duration.ofMillis(200)));
     }
 
     @GetMapping("/send")
@@ -46,6 +49,4 @@ public class ChatController {
                 .doOnNext(msg -> sink.tryEmitNext(msg))
                 .then();
     }
-
-
 }

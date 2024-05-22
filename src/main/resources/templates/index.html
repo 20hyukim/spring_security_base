@@ -25,6 +25,7 @@
 
 <script>
     const roomNumber = document.getElementById('roomNumber').textContent;
+    console.log("Room Number:" , roomNumber);
     const eventSource = new EventSource(`/chat?roomId=${encodeURIComponent(roomNumber)}`);
     const messagesDiv = document.getElementById('messages');
 

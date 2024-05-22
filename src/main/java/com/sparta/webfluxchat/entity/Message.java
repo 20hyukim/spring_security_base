@@ -14,7 +14,9 @@ public class Message {
     private String id;
     private String content;
     private long timestamp;
-    private long userId;
+    private Long userId;
+
+    public Message() {}
 
     public Message(String content, long timestamp, Long id) {
         this.content = content;
