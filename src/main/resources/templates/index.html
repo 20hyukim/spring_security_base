@@ -24,7 +24,8 @@
 <h5 id="roomNumber" th:text="${roomNumber}">Room Number</h5>
 
 <script>
-    const eventSource = new EventSource('/chat');
+    const roomNumber = document.getElementById('roomNumber').textContent;
+    const eventSource = new EventSource(`/chat?roomId=${encodeURIComponent(roomNumber)}`);
     const messagesDiv = document.getElementById('messages');
 
     eventSource.onmessage = function(event) {
