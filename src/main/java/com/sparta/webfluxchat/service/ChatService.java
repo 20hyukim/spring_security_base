@@ -26,10 +26,6 @@ public class ChatService {
     public Flux<Message> findMessagesByRoomId(Long roomId) {
         String collectionName = "messages_room_" + roomId;
         logger.info("Finding messages in collection: {}", collectionName);
-        return reactiveMongoTemplate.findAll(Message.class, collectionName)
-                .doOnSubscribe(subscription -> logger.info("Subscription to find messages started"))
-                .doOnNext(foundMessage -> logger.info("Found message: {}", foundMessage))
-                .doOnError(error -> logger.error("Error occurred while finding messages: {}", error.getMessage()))
-                .doOnComplete(() -> logger.info("Completed finding messages in collection: {}", collectionName));
+        return reactiveMongoTemplate.findAll(Message.class, collectionName);
     }
 }
