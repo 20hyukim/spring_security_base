@@ -36,8 +36,6 @@ public class ChatController {
     public Flux<Message> streamMessages(@RequestParam("roomId") Long roomId) {
         logger.info("Streaming messages for roomId: {}", roomId);
         return chatService.findMessagesByRoomId(roomId)
-                .doOnSubscribe(subscription -> logger.info("Subscribed to message stream for roomId: {}", roomId))
-                .doOnComplete(() -> logger.info("Completed message stream for roomId: {}", roomId))
                 .mergeWith(sink.asFlux().delayElements(Duration.ofMillis(200)));
     }
 
