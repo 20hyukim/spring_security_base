@@ -18,7 +18,7 @@ import java.util.List;
 public class RoomController {
 
     private final ChatRoomService chatRoomService;
-
+    //
     @GetMapping("/")
     public String chatRoomPage(Model model){
         List<ChatRoom> chatRooms = chatRoomService.chatLists();
